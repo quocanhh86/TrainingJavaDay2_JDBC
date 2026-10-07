@@ -11,7 +11,7 @@
 <div th:replace="~{fragment/header :: header}"></div>
 
 <main class="main-content">
-    <h1 class="page-title" th:text="${titlePage} ?: 'Danh sách nhân viên'"></h1>
+    <h1 class="page-title" th:text="#{employee.list}"></h1>
 
     <div class="table-responsive">
         <table class="custom-table">
@@ -19,18 +19,18 @@
             <tr>
                 <th>STT</th>
                 <th>Id</th>
-                <th th:text="#{employee.name}">Họ và tên</th>
-                <th th:text="#{employee.age}">Tuổi</th>
-                <th th:text="#{employee.type}">Phân loại</th>
-                <th th:text="#{common.function}">Hành động</th>
+                <th th:text="#{employee.name}"></th>
+                <th th:text="#{employee.age}"></th>
+                <th th:text="#{employee.type}"></th>
+                <th th:text="#{common.function}"></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="employee, index : ${employees}">
-                <td th:text="${index.count}">1</td>
-                <td th:text="${employee.id}">1</td>
-                <td th:text="${employee.name}">Nguyễn Văn A</td>
-                <td th:text="${employee.age}">28</td>
+                <td th:text="${index.count}"></td>
+                <td th:text="${employee.id}"></td>
+                <td th:text="${employee.name}"></td>
+                <td th:text="${employee.age}"></td>
                 <td>
                     <span class="badge badge-old" th:if="${employee.age &gt;= 45}" th:text="#{employee.old} ?: 'Lớn tuổi'"></span>
                     <span class="badge badge-medium" th:if="${employee.age &lt; 45 and employee.age &gt;= 25}" th:text="#{employee.medium} ?: 'Trung niên'"></span>
@@ -38,8 +38,8 @@
                 </td>
                 <td class="action-cell">
                     <div class="action-buttons">
-                        <a th:href="@{/employees/{id}(id=${employee.id})}" th:text="#{employee.detail} ?: 'Sửa'" class="table-link"></a>
-                        <form th:action="@{/employees/delete/{id}(id=${employee.id})}" th:method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
+                        <a th:href="@{/employee/{id}(id=${employee.id})}" th:text="#{employee.detail} ?: 'Sửa'" class="table-link"></a>
+                        <form th:action="@{/employee/delete/{id}(id=${employee.id})}" th:method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
                             <button type="submit" th:text="#{employee.delete} ?: 'Xóa'" class="btn-delete"></button>
                         </form>
                     </div>
@@ -50,11 +50,11 @@
     </div>
 
     <div class="card">
-        <h3 class="card-title" th:text="${employee.id != null} ? 'Cập nhật thông tin nhân viên' : 'Thêm mới nhân viên'">Form thêm mới, cập nhật nhân viên</h3>
+        <h3 class="card-title" th:text="${employee.id != null} ? 'Cập nhật thông tin nhân viên' : 'Thêm mới nhân viên'"></h3>
         <form
-                th:action="${employee.id != null} ? @{/employees/{id}(id = ${employee.id})} : @{/employees}"
+                th:action="@{/employee}"
                 th:object="${employee}"
-                th:method="${employee.id != null} ? 'put' : 'post'" class="app-form">
+                th:method="post" class="app-form">
             <div class="form-group">
                 <label for="name" th:text="#{employee.name}" class="form-label">Họ và tên</label>
                 <input id="name" th:field="*{name}" type="text" class="form-control" placeholder="Nhập họ và tên..." required>
