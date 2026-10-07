@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titlePage} ?: 'Quản lý nhân viên'">Quản lý nhân viên</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragment/header :: header}"></div>
+
+<main class="main-content">
+    <h1 class="page-title" th:text="${titlePage} ?: 'Danh sách nhân viên'"></h1>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Id</th>
+                <th th:text="#{employee.name}">Họ và tên</th>
+                <th th:text="#{employee.age}">Tuổi</th>
+                <th th:text="#{employee.type}">Phân loại</th>
+                <th th:text="#{common.function}">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee, index : ${employees}">
+                <td th:text="${index.count}">1</td>
+                <td th:text="${employee.id}">1</td>
+                <td th:text="${employee.name}">Nguyễn Văn A</td>
+                <td th:text="${employee.age}">28</td>
+                <td>
+                    <span class="badge badge-old" th:if="${employee.age &gt;= 45}" th:text="#{employee.old} ?: 'Lớn tuổi'"></span>
+                    <span class="badge badge-medium" th:if="${employee.age &lt; 45 and employee.age &gt;= 25}" th:text="#{employee.medium} ?: 'Trung niên'"></span>
+                    <span class="badge badge-young" th:if="${employee.age &lt; 25}" th:text="#{employee.young} ?: 'Trẻ'"></span>
+                </td>
+                <td class="action-cell">
+                    <div class="action-buttons">
+                        <a th:href="@{/employees/{id}(id=${employee.id})}" th:text="#{employee.detail} ?: 'Sửa'" class="table-link"></a>
+                        <form th:action="@{/employees/delete/{id}(id=${employee.id})}" th:method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
+                            <button type="submit" th:text="#{employee.delete} ?: 'Xóa'" class="btn-delete"></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3 class="card-title" th:text="${employee.id != null} ? 'Cập nhật thông tin nhân viên' : 'Thêm mới nhân viên'">Form thêm mới, cập nhật nhân viên</h3>
+        <form
+                th:action="${employee.id != null} ? @{/employees/{id}(id = ${employee.id})} : @{/employees}"
+                th:object="${employee}"
+                th:method="${employee.id != null} ? 'put' : 'post'" class="app-form">
+            <div class="form-group">
+                <label for="name" th:text="#{employee.name}" class="form-label">Họ và tên</label>
+                <input id="name" th:field="*{name}" type="text" class="form-control" placeholder="Nhập họ và tên..." required>
+            </div>
+            <div class="form-group">
+                <label for="age" th:text="#{employee.age}" class="form-label">Tuổi</label>
+                <input id="age" th:field="*{age}" type="number" class="form-control" placeholder="Nhập độ tuổi..." min="1" max="150" required>
+            </div>
+            <button type="submit" class="btn-submit" th:text="${employee.id != null} ? 'Lưu thay đổi' : 'Thêm mới'">Tạo mới/ cập nhật</button>
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragment/footer :: footer}"></div>
+
+</body>
+</html>
